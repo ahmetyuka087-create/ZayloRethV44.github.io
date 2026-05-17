@@ -3,29 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZayloRethV44 | Siber Operasyon Merkezi</title>
+    <title>ZayloRethV44 | Ultra Siber Operasyon Üssü</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            background-color: #050505; 
+            background-color: #030303; 
             color: #00ff33; 
             font-family: 'Courier New', Courier, monospace; 
             text-align: center; 
-            padding: 20px 15px;
             min-height: 100vh;
             border: 4px solid #00ff33;
-            box-shadow: inset 0 0 25px #00ff33;
-            position: relative;
+            box-shadow: inset 0 0 30px #00ff33;
             overflow-x: hidden;
+            transition: all 0.5s ease;
         }
-        
-        /* Matrix Yağmuru Efekti */
+
+        /* Giriş Ekranı (Parmak İzi) */
+        #auth-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .fingerprint-box {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #00ff33;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0,255,51,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+        }
+        .laser-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: #00ff33;
+            box-shadow: 0 0 10px #00ff33;
+            top: 0;
+            animation: scan 2s linear infinite;
+            display: none;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        /* Matrix Arka Plan */
         #matrix {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
-            opacity: 0.15;
-            pointer-events: none;
+            z-index: 1; opacity: 0.12; pointer-events: none;
         }
 
         .container {
@@ -33,189 +70,208 @@
             margin: 20px auto;
             position: relative;
             z-index: 10;
-        }
-        h1 { 
-            font-size: 2.2em; 
-            text-shadow: 0 0 15px #00ff33;
-            margin-bottom: 20px;
-        }
-        .status-box {
-            background: rgba(0, 255, 51, 0.03);
-            border: 1px dashed #00ff33;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-
-        /* Sahte Terminal Ekranı */
-        .terminal {
-            background: #000;
-            border: 1px solid #00ff33;
-            padding: 12px;
-            text-align: left;
-            font-size: 0.85em;
-            height: 100px;
-            overflow-y: hidden;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(0,255,51,0.2);
+            padding: 0 15px;
+            display: none;
         }
         
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .btn {
-            display: block;
-            padding: 14px;
-            color: #0a0a0a;
-            background-color: #00ff33;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 4px;
-            box-shadow: 0 0 15px rgba(0,255,51,0.5);
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-        }
-        .btn:hover {
-            background-color: #0a0a0a;
-            color: #00ff33;
+        h1 { font-size: 2.2em; text-shadow: 0 0 15px #00ff33; margin-bottom: 15px; }
+
+        /* Dönen Dünya Haritası Alanı */
+        .radar-screen {
+            width: 100%;
+            height: 180px;
             border: 1px solid #00ff33;
-            box-shadow: 0 0 25px #00ff33;
+            background: radial-gradient(circle, rgba(0,255,51,0.08) 0%, rgba(0,0,0,0.5) 100%);
+            margin-bottom: 15px;
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
         }
-        .btn-discord {
-            background-color: #5865F2;
-            color: white;
-            box-shadow: 0 0 15px rgba(88,101,242,0.5);
+        .globe {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #00ff33;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 8s linear infinite;
+            position: relative;
         }
-        .btn-discord:hover {
-            background-color: #0a0a0a;
-            color: #5865F2;
-            border: 1px solid #5865F2;
-            box-shadow: 0 0 25px #5865F2;
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .radar-sweep {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(0,255,51,0.1) 0%, transparent 50%);
+            transform-origin: center;
+            animation: sweep 4s linear infinite;
         }
-        .fake-link {
-            color: #ff3333;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 10px;
-            text-shadow: 0 0 5px #ff3333;
+        @keyframes sweep { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Sahte Terminal */
+        .terminal {
+            background: #000; border: 1px solid #00ff33;
+            padding: 10px; text-align: left; font-size: 0.8em;
+            height: 80px; overflow-y: hidden; margin-bottom: 15px;
+            border-radius: 4px;
         }
-        .counter {
-            margin-top: 25px;
-            font-size: 0.85em;
-            color: #888;
+
+        /* Ses Dalgaları */
+        .equalizer {
+            display: flex; justify-content: center; gap: 4px; height: 30px; margin-bottom: 15px;
+        }
+        .bar { width: 6px; height: 100%; background: #00ff33; transform-origin: bottom; }
+        .animate-bar { animation: bounce 0.5s ease infinite alternate; }
+        @keyframes bounce { 0% { transform: scaleY(0.2); } 100% { transform: scaleY(1); } }
+
+        .btn {
+            display: block; width: 100%; padding: 12px; margin-bottom: 10px;
+            color: #0a0a0a; background: #00ff33; text-decoration: none;
+            font-weight: bold; border-radius: 4px; border: none;
+            font-family: inherit; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,51,0.4);
+        }
+        .btn-danger {
+            background: #ff3333; color: #fff; box-shadow: 0 0 15px rgba(255,51,51,0.4);
+        }
+
+        /* Kırmızı Alarm Durumu */
+        .red-alert {
+            background-color: #200000 !important;
+            color: #ff3333 !important;
+            border-color: #ff3333 !important;
+            box-shadow: inset 0 0 40px #ff3333 !important;
         }
     </style>
 </head>
 <body>
+    
+    <div id="auth-screen">
+        <h2 style="margin-bottom: 20px; letter-spacing: 2px;">KİMLİK DOĞRULAMA</h2>
+        <div class="fingerprint-box" id="f-box" onclick="startScan()">
+            🖐️
+            <div class="laser-line" id="laser"></div>
+        </div>
+        <p id="auth-status" style="margin-top: 15px; font-size: 0.9em; color: #888;">Siber Tarama İçin Dokun...</p>
+    </div>
+
     <canvas id="matrix"></canvas>
     
-    <div class="container">
-        <h1>[ ZayloRethV44 ]</h1>
+    <div class="container" id="main-content">
+        <h1 id="main-title">[ ZayloRethV44 ]</h1>
         
-        <div class="status-box">
-            <p>SİSTEM DURUMU: <span class="blink" style="color: #00ff33; font-weight: bold;">AKTİF V44</span></p>
+        <div class="radar-screen" id="radar">
+            <div class="radar-sweep"></div>
+            <div class="globe">
+                <div style="position:absolute; width:10px; height:10px; background:#ff3333; border-radius:50%; top:20px; left:30px; box-shadow: 0 0 10px #ff3333;"></div>
+            </div>
+            <div style="font-size: 0.75em; position:absolute; bottom:5px; width:100%;" id="radar-text">RADAR: SALDIRI AKIŞI AKTİF</div>
         </div>
 
-        <div class="terminal" id="term">
-            <div>> Başlatılıyor...</div>
+        <div class="terminal" id="term"></div>
+
+        <div class="equalizer">
+            <div class="bar animate-bar" style="animation-delay: 0.1s"></div>
+            <div class="bar animate-bar" style="animation-delay: 0.4s"></div>
+            <div class="bar animate-bar" style="animation-delay: 0.2s"></div>
+            <div class="bar animate-bar" style="animation-delay: 0.6s"></div>
+            <div class="bar animate-bar" style="animation-delay: 0.3s"></div>
         </div>
 
-        <div class="btn-group">
-            <button class="btn" onclick="startSystem()">Erişimi Başlat (Müzikli)</button>
-            
-            <a href="https://discord.com" target="_blank" class="btn btn-discord">Discord Üssü</a>
-        </div>
-
-        <p style="color: #aaa; font-size: 0.9em;">Gizli Sızma Portu:</p>
-        <div class="fake-link" onclick="triggerFakeHack()">https://panel.zaylorethv44-database.net/bypass</div>
-
-        <div class="counter">
-            <p>[ SİBER GİRİŞ SAYISI: <span id="countText">1432</span> ]</p>
-        </div>
+        <button class="btn" onclick="triggerFakeHack()">Sızma Ağını Genişlet</button>
+        <button class="btn btn-danger" onclick="startSelfDestruct()">ACİL DURUM: SİSTEMİ İMHA ET</button>
     </div>
 
     <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Matrix Yağmuru Kodu
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const rainDrops = Array(Math.floor(columns)).fill(1);
+        // Parmak İzi Tarama Fonksiyonu
+        function startScan() {
+            const laser = document.getElementById('laser');
+            const status = document.getElementById('auth-status');
+            laser.style.display = 'block';
+            status.innerText = 'Biyometrik Veri Taranıyor...';
+            status.style.color = '#00ff33';
+            
+            setTimeout(() => {
+                // Yapay Zeka Ses Sentezi (Robot Ses Karşılaması)
+                const speech = new SpeechSynthesisUtterance("Access Granted. Welcome ZayloReth");
+                speech.lang = "en-US";
+                window.speechSynthesis.speak(speech);
+                
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('bgMusic').play().catch(()=>{});
+                initMatrix();
+                startTerminal();
+            }, 2500);
+        }
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff33';
-            ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
+        // Matrix Yağmuru
+        function initMatrix() {
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const alphabet = "01010101XYZV44"; const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = Array(Math.floor(columns)).fill(1);
+
+            setInterval(() => {
+                ctx.fillStyle = 'rgba(3, 3, 3, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = document.body.classList.contains('red-alert') ? '#ff3333' : '#00ff33';
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                    rainDrops[i]++;
                 }
-                rainDrops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 30);
-
-        // Terminal Yazı Döngüsü
-        const logs = [
-            "> Güvenli bağlantı kuruldu.",
-            "> Protokol V44 aktif ediliyor...",
-            "> IP havuzu taranıyor...",
-            "> Proxy zinciri başarılı.",
-            "> Firewall devre dışı bırakıldı.",
-            "> Veri sızıntısı engellendi.",
-            "> Hedef sisteme tünel açıldı."
-        ];
-        let logIdx = 0;
-        setInterval(() => {
-            const term = document.getElementById('term');
-            if(logIdx < logs.length) {
-                term.innerHTML += `<div>${logs[logIdx]}</div>`;
-                logIdx++;
-            } else {
-                term.innerHTML = "<div>> Sistem Stabil. Loglar temizlendi.</div>";
-                logIdx = 0;
-            }
-        }, 3000);
-
-        // Sayaç Simulasyonu
-        setInterval(() => {
-            const count = document.getElementById('countText');
-            count.innerText = parseInt(count.innerText) + Math.floor(Math.random() * 3) + 1;
-        }, 4000);
-
-        // Sistemi ve Müziği Başlatma
-        function startSystem() {
-            const music = document.getElementById('bgMusic');
-            music.play().catch(() => {});
-            alert('Siber Operasyon Başlatıldı! Fon müziği aktif.');
+            }, 30);
         }
 
-        // Sahte Link Şakası Fonksiyonu
+        // Terminal Akışı
+        function startTerminal() {
+            const logs = ["> Çekirdek protokol yüklendi.", "> Kripto tüneller aktif.", "> Siber kalkanlar kuruldu.", "> V44 Laboratuvarı Stabil."];
+            let idx = 0;
+            setInterval(() => {
+                const term = document.getElementById('term');
+                if(idx < logs.length) {
+                    term.innerHTML += `<div>${logs[idx]}</div>`; idx++;
+                } else { term.innerHTML = "<div>> Loglar döngüye alındı...</div>"; idx = 0; }
+            }, 2500);
+        }
+
+        // Sahte Saldırı Link Uyarısı
         function triggerFakeHack() {
-            alert('UYARI: Sahte Link Tetiklendi!');
-            alert('Hedef IP Adresi Çözümleniyor...');
-            alert('Siber Güvenlik Protokolü Kırıldı! ZayloRethV44 veritabanına erişim sağlandı.');
+            alert('Siber Ağ Tetiklendi!\nHedef veritabanı bypass ediliyor...');
+        }
+
+        // Kendi Kendini İmha Modu (Kırmızı Alarm)
+        function startSelfDestruct() {
+            document.body.classList.add('red-alert');
+            document.getElementById('main-title').innerText = "[ SİSTEM İMHA MODU ]";
+            document.getElementById('radar').style.borderColor = "#ff3333";
+            document.getElementById('radar-text').innerText = "TEHLİKE: GERİ SAYIM BAŞLADI!";
+            document.getElementById('radar-text').style.color = "#ff3333";
+            
+            let bars = document.querySelectorAll('.bar');
+            bars.forEach(b => b.style.backgroundColor = '#ff3333');
+
+            let count = 10;
+            const term = document.getElementById('term');
+            
+            const speechAlert = new SpeechSynthesisUtterance("Warning. Self destruct initiated.");
+            speechAlert.lang = "en-US";
+            window.speechSynthesis.speak(speechAlert);
+
+            const interval = setInterval(() => {
+                term.innerHTML = `<div style="color:#ff3333; font-weight:bold;">> SİSTEMİN KAPANMASINA: ${count} SANİYE!</div>`;
+                count--;
+                if(count < 0) {
+                    clearInterval(interval);
+                    document.body.innerHTML = "<h1 style='color:#ff3333; margin-top:40vh;'>[ SİSTEM TAMAMEN İMHA EDİLDİ ]</h1>";
+                }
+            }, 1000);
         }
     </script>
 </body>
