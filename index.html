@@ -3,60 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZayloRethV44 | Siber Laboratuvarı</title>
+    <title>ZayloRethV44 | Siber Operasyon Merkezi</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            background-color: #0a0a0a; 
+            background-color: #050505; 
             color: #00ff33; 
             font-family: 'Courier New', Courier, monospace; 
             text-align: center; 
-            padding: 30px 15px;
+            padding: 20px 15px;
             min-height: 100vh;
             border: 4px solid #00ff33;
-            box-shadow: inset 0 0 20px #00ff33;
+            box-shadow: inset 0 0 25px #00ff33;
             position: relative;
+            overflow-x: hidden;
         }
+        
+        /* Matrix Yağmuru Efekti */
+        #matrix {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
         .container {
             max-width: 500px;
-            margin: 40px auto;
+            margin: 20px auto;
             position: relative;
             z-index: 10;
         }
         h1 { 
             font-size: 2.2em; 
             text-shadow: 0 0 15px #00ff33;
-            margin-bottom: 25px;
-        }
-        p {
-            font-size: 1em;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            line-height: 1.5;
+            margin-bottom: 20px;
         }
         .status-box {
-            background: rgba(0, 255, 51, 0.05);
+            background: rgba(0, 255, 51, 0.03);
             border: 1px dashed #00ff33;
-            padding: 20px;
-            margin-bottom: 25px;
+            padding: 15px;
+            margin-bottom: 20px;
             border-radius: 5px;
         }
         .blink { animation: blinker 1.5s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Sahte Terminal Ekranı */
+        .terminal {
+            background: #000;
+            border: 1px solid #00ff33;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.85em;
+            height: 100px;
+            overflow-y: hidden;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,255,51,0.2);
+        }
         
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
         .btn {
-            display: inline-block;
-            padding: 14px 35px;
+            display: block;
+            padding: 14px;
             color: #0a0a0a;
             background-color: #00ff33;
             text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
             border-radius: 4px;
-            box-shadow: 0 0 15px #00ff33;
+            box-shadow: 0 0 15px rgba(0,255,51,0.5);
             transition: 0.3s;
             cursor: pointer;
-            margin-top: 10px;
+            border: none;
+            font-family: inherit;
         }
         .btn:hover {
             background-color: #0a0a0a;
@@ -64,27 +90,133 @@
             border: 1px solid #00ff33;
             box-shadow: 0 0 25px #00ff33;
         }
-        .bg-lines {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-            background-size: 100% 4px;
-            z-index: 1;
-            pointer-events: none;
+        .btn-discord {
+            background-color: #5865F2;
+            color: white;
+            box-shadow: 0 0 15px rgba(88,101,242,0.5);
+        }
+        .btn-discord:hover {
+            background-color: #0a0a0a;
+            color: #5865F2;
+            border: 1px solid #5865F2;
+            box-shadow: 0 0 25px #5865F2;
+        }
+        .fake-link {
+            color: #ff3333;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+            text-shadow: 0 0 5px #ff3333;
+        }
+        .counter {
+            margin-top: 25px;
+            font-size: 0.85em;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <div class="bg-lines"></div>
+    <canvas id="matrix"></canvas>
+    
     <div class="container">
         <h1>[ ZayloRethV44 ]</h1>
+        
         <div class="status-box">
             <p>SİSTEM DURUMU: <span class="blink" style="color: #00ff33; font-weight: bold;">AKTİF V44</span></p>
-            <p style="font-size: 0.85em; color: #888;">Laboratuvar başarıyla güncellendi.</p>
         </div>
-        <p>Sanal dünyanın sınırlarını zorlayan resmi web üssüne hoş geldiniz.</p>
-        <a href="#" class="btn" onclick="alert('Siber sisteme başarıyla sızıldı!')">Erişimi Başlat</a>
+
+        <div class="terminal" id="term">
+            <div>> Başlatılıyor...</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn" onclick="startSystem()">Erişimi Başlat (Müzikli)</button>
+            
+            <a href="https://discord.com" target="_blank" class="btn btn-discord">Discord Üssü</a>
+        </div>
+
+        <p style="color: #aaa; font-size: 0.9em;">Gizli Sızma Portu:</p>
+        <div class="fake-link" onclick="triggerFakeHack()">https://panel.zaylorethv44-database.net/bypass</div>
+
+        <div class="counter">
+            <p>[ SİBER GİRİŞ SAYISI: <span id="countText">1432</span> ]</p>
+        </div>
     </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Matrix Yağmuru Kodu
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff33';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 30);
+
+        // Terminal Yazı Döngüsü
+        const logs = [
+            "> Güvenli bağlantı kuruldu.",
+            "> Protokol V44 aktif ediliyor...",
+            "> IP havuzu taranıyor...",
+            "> Proxy zinciri başarılı.",
+            "> Firewall devre dışı bırakıldı.",
+            "> Veri sızıntısı engellendi.",
+            "> Hedef sisteme tünel açıldı."
+        ];
+        let logIdx = 0;
+        setInterval(() => {
+            const term = document.getElementById('term');
+            if(logIdx < logs.length) {
+                term.innerHTML += `<div>${logs[logIdx]}</div>`;
+                logIdx++;
+            } else {
+                term.innerHTML = "<div>> Sistem Stabil. Loglar temizlendi.</div>";
+                logIdx = 0;
+            }
+        }, 3000);
+
+        // Sayaç Simulasyonu
+        setInterval(() => {
+            const count = document.getElementById('countText');
+            count.innerText = parseInt(count.innerText) + Math.floor(Math.random() * 3) + 1;
+        }, 4000);
+
+        // Sistemi ve Müziği Başlatma
+        function startSystem() {
+            const music = document.getElementById('bgMusic');
+            music.play().catch(() => {});
+            alert('Siber Operasyon Başlatıldı! Fon müziği aktif.');
+        }
+
+        // Sahte Link Şakası Fonksiyonu
+        function triggerFakeHack() {
+            alert('UYARI: Sahte Link Tetiklendi!');
+            alert('Hedef IP Adresi Çözümleniyor...');
+            alert('Siber Güvenlik Protokolü Kırıldı! ZayloRethV44 veritabanına erişim sağlandı.');
+        }
+    </script>
 </body>
 </html>
-
