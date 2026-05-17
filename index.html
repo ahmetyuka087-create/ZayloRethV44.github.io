@@ -11,35 +11,34 @@
             color: #00ff33; 
             font-family: 'Courier New', Courier, monospace; 
             text-align: center; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 30px 15px;
             min-height: 100vh;
-            overflow: hidden;
-            border: 2px solid #00ff33;
+            border: 4px solid #00ff33;
             box-shadow: inset 0 0 20px #00ff33;
+            position: relative;
         }
         .container {
-            max-width: 600px;
-            padding: 20px;
+            max-width: 500px;
+            margin: 40px auto;
+            position: relative;
             z-index: 10;
         }
         h1 { 
-            font-size: 2.5em; 
+            font-size: 2.2em; 
             text-shadow: 0 0 15px #00ff33;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         p {
-            font-size: 1.1em;
-            margin-bottom: 30px;
+            font-size: 1em;
+            margin-bottom: 25px;
             letter-spacing: 1px;
+            line-height: 1.5;
         }
         .status-box {
             background: rgba(0, 255, 51, 0.05);
             border: 1px dashed #00ff33;
-            padding: 15px;
-            margin-bottom: 30px;
+            padding: 20px;
+            margin-bottom: 25px;
             border-radius: 5px;
         }
         .blink { animation: blinker 1.5s linear infinite; }
@@ -47,20 +46,45 @@
         
         .btn {
             display: inline-block;
-            padding: 12px 30px;
+            padding: 14px 35px;
             color: #0a0a0a;
             background-color: #00ff33;
             text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
-            border-radius: 3px;
+            border-radius: 4px;
             box-shadow: 0 0 15px #00ff33;
             transition: 0.3s;
             cursor: pointer;
+            margin-top: 10px;
         }
         .btn:hover {
             background-color: #0a0a0a;
             color: #00ff33;
             border: 1px solid #00ff33;
-            box
+            box-shadow: 0 0 25px #00ff33;
+        }
+        .bg-lines {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+            background-size: 100% 4px;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-lines"></div>
+    <div class="container">
+        <h1>[ ZayloRethV44 ]</h1>
+        <div class="status-box">
+            <p>SİSTEM DURUMU: <span class="blink" style="color: #00ff33; font-weight: bold;">AKTİF V44</span></p>
+            <p style="font-size: 0.85em; color: #888;">Laboratuvar başarıyla güncellendi.</p>
+        </div>
+        <p>Sanal dünyanın sınırlarını zorlayan resmi web üssüne hoş geldiniz.</p>
+        <a href="#" class="btn" onclick="alert('Siber sisteme başarıyla sızıldı!')">Erişimi Başlat</a>
+    </div>
+</body>
+</html>
 
